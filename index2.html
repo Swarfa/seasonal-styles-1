@@ -1,0 +1,72 @@
+<html>
+    <head>
+        <title>jquery</title>
+        <script src="https://code.jquery.com/jquery-latest.js"></script>
+        <style>
+            div#myDiv{
+                /* background-color: green; */
+            }
+
+            div#myDiv p{
+                /* background-color: cyan; */
+            }
+
+            div#yetAnotherDiv li:nth-child(even){
+                /* background-color:yellow; */
+            }
+
+
+        </style>
+    </head>
+    <body>
+        <h1>Playing with jquery</h1>
+        <div id="myDiv">
+            <p>I'm inside a dive!</p>
+            <p>I'm inside a dive!</p>
+            <p>I'm inside a dive!</p>
+            <p>I'm inside a dive!</p>
+            <p>I'm inside a dive!</p>
+        </div>
+
+        <div id="yetAnotherDiv">
+            <ul>
+                <li>I'm a list item!</li>
+                <li>I'm a list item!</li>
+                <li>I'm a list item!</li>
+                <li>I'm a list item!</li>
+                <li>I'm a list item!</li>
+            </ul>
+     
+     
+        </div>
+    </body>
+    <script>
+
+        // document.querySelector("div#myDiv").style.backgroundColor="Orange";
+
+        $("document").ready(function(){
+            let counter = 0;
+            $("div#myDiv p").each(function(){
+                counter++
+                $(this).prepend(counter + "] ")
+            });
+
+
+
+            //start hidden
+            $("div#yetAnotherDiv li").hide();
+
+
+            //reveal li items
+            $("div#yetAnotherDiv")
+                .hide()
+                .fadeIn(2000,function(){
+                $("div#yetAnotherDiv li").each(function(){
+                    $(this).slideDown(1000);
+                });
+            });
+
+
+        });
+    </script>
+</html>
