@@ -53,7 +53,7 @@
 	</header>
      
    <main class="wrapper">
-    <header><h3>Outfitter for All Seasons!</h3></header>
+    <header><h3 id="season-slogan">Outfitter for All Seasons!</h3></header>
     <p>
         <form id="dateForm">
         <label for="dateField">
@@ -86,29 +86,110 @@
     </p>
     <footer>
     <p><small>&copy; 2021 by 
-        Sam Ebengho, All Rights Reserved ~ 
+        Sharmarke Warfa, All Rights Reserved ~ 
         <a id="html-checker" href="#">Check HTML</a> ~ 
         <a id="css-checker" href="#">Check CSS</a></small>
     </p>
     </footer>
   </main>
   <script src="js/main.js"></script>
+  <!-- Removed seasonal-styles.js if it was here, as extra-credit has its own specific logic below -->
   <script>
-	$("document").ready(function(){
-		$('#dateForm').submit(function(e){//handle form submission event
-            e.preventDefault();//stop default submission
-			var datetext = $('input[name=dateField]').val();//grab data from textbox
-			var formDate = new Date(datetext);//create a date from form input
-			var today = new Date();
-			
-			if(formDate > today)
-			{
-				alert(datetext + " is in the future!");
-			}else{
-				alert(datetext + " is in the past!");
-			}
-		});
-	});
+    $(document).ready(function() {
+        // Define paths for default images (from your HTML)
+        const defaultLogo = "images/four-seasons.gif";
+        const defaultWear = "images/300x400.png";
+        const defaultSlogan = "Outfitter for All Seasons! (Date Aware)";
+        const defaultTheme = "default-theme";
+
+        // Data for each season - ensure these image paths are correct and images exist
+        const seasonsData = {
+            "Spring": {
+                slogan: "Spring into our New Collection! (Date determined)",
+                logo: "images/spring-logo.png",
+                wear: "images/spring-wear.png",
+                theme: "spring-theme"
+            },
+            "Summer": {
+                slogan: "Catch the Summer Vibe with Our Gear! (Date determined)",
+                logo: "images/summer-logo.png",
+                wear: "images/summer-wear.png",
+                theme: "summer-theme"
+            },
+            "Fall": {
+                slogan: "Fall for Our Cozy Autumn Styles! (Date determined)",
+                logo: "images/fall-logo.png",
+                wear: "images/fall-wear.png",
+                theme: "fall-theme"
+            },
+            "Winter": {
+                slogan: "Warm Up this Winter with Our Collection! (Date determined)",
+                logo: "images/winter-logo.png",
+                wear: "images/winter-wear.png",
+                theme: "winter-theme"
+            }
+        };
+
+        function applySeasonUI(seasonName) {
+            let seasonInfo;
+            if (seasonName === "Default" || !seasonsData[seasonName]) {
+                $('#logo').attr('src', defaultLogo);
+                $('#wear').attr('src', defaultWear);
+                $('#season-slogan').text(defaultSlogan);
+                $('body').removeClass().addClass(defaultTheme);
+            } else {
+                seasonInfo = seasonsData[seasonName];
+                $('#logo').attr('src', seasonInfo.logo);
+                $('#wear').attr('src', seasonInfo.wear);
+                $('#season-slogan').text(seasonInfo.slogan);
+                $('body').removeClass().addClass(seasonInfo.theme);
+            }
+        }
+
+        function getSeasonByDate(date) {
+            const m = date.getMonth(); // 0-11 (Jan=0, Dec=11)
+            const d = date.getDate();  // 1-31
+
+            // Winter: Dec 21 to Mar 19
+            if ((m === 11 && d >= 21) || (m === 0) || (m === 1) || (m === 2 && d <= 19)) {
+                return 'Winter';
+            }
+            // Spring: Mar 20 to Jun 20
+            if ((m === 2 && d >= 20) || (m === 3) || (m === 4) || (m === 5 && d <= 20)) {
+                return 'Spring';
+            }
+            // Summer: Jun 21 to Sep 22
+            if ((m === 5 && d >= 21) || (m === 6) || (m === 7) || (m === 8 && d <= 22)) {
+                return 'Summer';
+            }
+            // Fall: Sep 23 to Dec 20
+            if ((m === 8 && d >= 23) || (m === 9) || (m === 10) || (m === 11 && d <= 20)) {
+                return 'Fall';
+            }
+            return 'Winter'; // Default fallback
+        }
+
+        $('#dateForm').submit(function(e) {
+            e.preventDefault();
+            var dateText = $('input[name=dateField]').val();
+            if (!dateText) {
+                alert("Please enter a date.");
+                return;
+            }
+            var formDate = new Date(dateText); // Create a date from form input
+            if (isNaN(formDate.getTime())) { // Check for invalid date
+                alert("Invalid date format. Please use a format like YYYY-MM-DD or MM/DD/YYYY.");
+                return;
+            }
+            const currentSeason = getSeasonByDate(formDate);
+            applySeasonUI(currentSeason);
+        });
+
+        // Apply default theme on page load for extra-credit.html
+        applySeasonUI("Default");
+         // Or, to show current season on load:
+        // applySeasonUI(getSeasonByDate(new Date()));
+    });
     </script>
   </body>
 </html>
