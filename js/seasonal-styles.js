@@ -34,34 +34,37 @@ $(document).ready(function() {
         }
     };
 
+    function setActiveSeasonNav(seasonName) {
+        // Remove active class from all nav links, then add to the selected one
+        $('header nav ul li.seasons a').removeClass('active-season');
+        $('header nav ul li.seasons a').each(function() {
+            if ($(this).text() === seasonName) {
+                $(this).addClass('active-season');
+            }
+        });
+    }
+
     function applySeason(seasonName) {
         let seasonInfo;
-
         if (seasonName === "Default" || !seasonsData[seasonName]) {
-            // Apply default styles
-            $('#logo').attr('src', defaultLogo);
-            $('#wear').attr('src', defaultWear);
+            $('#logo').attr({'src': defaultLogo, 'alt': 'Eddie Browser Four Seasons Logo'});
+            $('#wear').attr({'src': defaultWear, 'alt': 'Seasonal Wear'});
             $('#season-slogan').text(defaultSlogan);
             $('body').removeClass().addClass(defaultTheme);
         } else {
             seasonInfo = seasonsData[seasonName];
-            $('#logo').attr('src', seasonInfo.logo);
-            $('#wear').attr('src', seasonInfo.wear);
+            $('#logo').attr({'src': seasonInfo.logo, 'alt': seasonName + ' Logo'});
+            $('#wear').attr({'src': seasonInfo.wear, 'alt': seasonName + ' Wear'});
             $('#season-slogan').text(seasonInfo.slogan);
-            // Remove any existing season theme classes before adding the new one
             $('body').removeClass().addClass(seasonInfo.theme);
         }
+        setActiveSeasonNav(seasonName);
     }
 
     // Attach click event handlers to the navigation links
     $('header nav ul li.seasons a').on('click', function(e) {
-        e.preventDefault(); // Prevent default link behavior
-        
-        // Extract season name from the link's href or text.
-        // Using text() is safer if href might contain # or other characters.
-        // Your href attributes are clean ("Spring", "Summer", etc.), so $(this).attr('href') also works.
-        let seasonClicked = $(this).text(); // "Default", "Spring", "Summer", etc.
-        
+        e.preventDefault();
+        let seasonClicked = $(this).text();
         applySeason(seasonClicked);
     });
 

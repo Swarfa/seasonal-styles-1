@@ -52,6 +52,19 @@ nav ul li a {
     padding: 5px 10px;
 }
 
+nav ul li a.active-season {
+    background: #222;
+    color: #fff !important;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background 0.3s, color 0.3s;
+}
+
+nav ul li a:focus, nav ul li a:hover {
+    outline: 2px solid #007bff;
+    background: #f0f0f0;
+}
+
 main.wrapper > header > h3 { /* This is #season-slogan */
     text-align: center;
     font-size: 1.5em;
